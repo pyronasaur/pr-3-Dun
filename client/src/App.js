@@ -1,24 +1,14 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Books from "./pages/Books";
-import Detail from "./pages/Detail";
-import NoMatch from "./pages/NoMatch";
-import Nav from "./components/Nav";
+import GWin from "./components/GWin/index";
+//import Crafty from "craftyjs";
+
 
 function App() {
-  return (
-    <Router>
-      <div>
-        <Nav />
-        <Switch>
-          <Route exact path="/" component={Books} />
-          <Route exact path="/books" component={Books} />
-          <Route exact path="/books/:id" component={Detail} />
-          <Route component={NoMatch} />
-        </Switch>
-      </div>
-    </Router>
-  );
+  return <div>
+    <GWin id="game" canvas="canvas1" cWidth="800" cHeight="300" class="gwin"/>
+    <GWin id="game2" canvas="canvas2"cWidth="800" cHeight="300" class="gwin"/> 
+    <GWin id="game3" canvas="canvas2"cWidth="800" cHeight="300" class="gwin"/> 
+  </div>;
 }
 
 export default App;

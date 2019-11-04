@@ -1,0 +1,27 @@
+body {
+  margin: 30px auto;
+  text-align: center;
+  background-color: #161414;
+  color: #999;
+}
+
+#root {
+  display: flex;
+  justify-content: space-around;
+}
+
+.gameWinDiv {
+  height: 300px;
+  width: 800px;
+}
+
+.gameWindow {
+  border: 1px solid #333;
+  background-color: #000;
+  -webkit-box-shadow: 0px 0px 24px 0px black;
+  -moz-box-shadow: 0px 0px 24px 0px black;
+  box-shadow: 0px 0px 24px 0px black;
+  border-radius: 10px;
+}
+
+/*# sourceMappingURL=output.css.map */
