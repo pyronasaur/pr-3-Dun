@@ -9,11 +9,15 @@ function stateToProperty(state) {
   }
 }
 
-function dispatchDeath() {
+function dispatchDeath(lastLoc, direction) {
   store.dispatch({
     type: "DEAD_IN_ZONE",
     payload: {
-      alive: false
+        alive:true,
+        width: 800,
+        height: 300,
+        lastLoc: lastLoc,
+        direction: direction
     }
   })
 }
@@ -48,8 +52,6 @@ class GWin extends Component {
           scene.add("starfield");
 
           const stars = scene.add(new Container());
-
-          if(this.state.isActive = true) {
             
             const blue = stars.add(new Sprite(textures.blueplanet));
             blue.pos.x = Math.ceil(Math.random() * this.props.cWidth);
@@ -78,34 +80,37 @@ class GWin extends Component {
               full.pos.y = Math.ceil(Math.random() * this.props.cHeight);
             }
 
-            const ships = scene.add(new Container());
-            ships.pos.x = 0;
-            ships.pos.y = h / 2 - 100;
-            
-            const ship = ships.add(new Sprite(textures.spaceship));
-            ship.pivot = { x: 16, y: 16 };
-            
-            ship.pos = { x: 40, y: h / 2 };
-            ship.update = function(dt, t) {
-              const { x, y } = controls;
-              //const rps = Math.PI * 2 * dt;
-              this.pos.x += x * dt * 200;
-              if(this.pos.x > w || this.pos.x < -120 ||
-                this.pos.y > h || this.pos.y < -120) {
-                ships.remove(ship);
-                ship.dead = true;
-                dispatchDeath();
-                onSceneLeave();
-              }
-              this.pos.y += y * dt * 200;
-              //ship.rotation += 1 * rps;
-              //console.log(`(x , y) = ${this.pos.x},${this.pos.y}`);
+            if(this.state.isActive) {
+              const ships = scene.add(new Container());
+              ships.pos.x = 0;
+              ships.pos.y = h / 2 - 100;
+              
+              const ship = ships.add(new Sprite(textures.spaceship));
+              ship.pivot = { x: 16, y: 16 };
+              
+              ship.pos = { x: 40, y: h / 2 };
+              ship.update = function(dt, t) {
+                const { x, y } = controls;
+                //const rps = Math.PI * 2 * dt;
+                this.pos.x += x * dt * 200;
+                if(this.pos.x > w || this.pos.x < -120 ||
+                  this.pos.y > h || this.pos.y < -120) {
+                  ships.remove(ship);
+                  ship.dead = true;
+                  dispatchDeath("south", "south");
+                  onSceneLeave();
+                  
+                }
+                this.pos.y += y * dt * 200;
+                //ship.rotation += 1 * rps;
+                //console.log(`(x , y) = ${this.pos.x},${this.pos.y}`);
 
-              const { scale } = this;
-              scale.x = Math.abs(Math.sin(t)) + 2;
-              scale.y = Math.abs(Math.sin(t * 1.1)) + 1.5;
+                const { scale } = this;
+                scale.x = Math.abs(Math.sin(t)) + 2;
+                scale.y = Math.abs(Math.sin(t * 1.1)) + 1.5;
+              }
             };
-          }
+          
 
         game.run(dt => {
           const rps = Math.PI * 2 * dt;
