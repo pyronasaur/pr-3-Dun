@@ -9,17 +9,66 @@ function stateToProperty(state) {
   }
 }
 
-function dispatchDeath(lastLoc, direction) {
+function dispatchDeath(x, y, lastLoc, direction, lastLocKey) {
   store.dispatch({
     type: "DEAD_IN_ZONE",
     payload: {
         alive:true,
-        width: 800,
-        height: 300,
+        width: 400,
+        height: 400,
+        enterCoords: [x, y],
         lastLoc: lastLoc,
+        lastLocKey: lastLocKey,
         direction: direction
     }
   })
+}
+
+//calculate new entry point for new gWin
+function calculateEntry(x, y, w, h){
+
+  let startX;
+  let startY;
+  let lastLoc;
+  let direction;
+
+  if(x > w){
+    startX = -25;
+    startY = y;
+    lastLoc = "WEST";
+    direction = "EAST";
+  }
+  if(x < -120) {
+    if(w > 400) {
+      startX = w - 425;
+    }
+    else{
+      startX = w - 25;
+    }
+    startY = y;
+    lastLoc = "EAST";
+    direction = "WEST";
+  }
+  if(y > h){
+    startX = x;
+    if(w > 400) {
+      startX = x / 2;
+    }
+    else{
+      startX = x;
+    }
+    startY = -90;
+    lastLoc = "NORTH";
+    direction = "SOUTH";
+  }
+  if(y < -120){
+    startX = x;
+    startY = h - 125;
+    lastLoc = "SOUTH";
+    direction = "NORTH";
+  }
+
+  return [startX, startY, lastLoc, direction]
 }
 
 class GWin extends Component {
@@ -86,9 +135,9 @@ class GWin extends Component {
               ships.pos.y = h / 2 - 100;
               
               const ship = ships.add(new Sprite(textures.spaceship));
-              ship.pivot = { x: 16, y: 16 };
+              ship.pivot = { x: 16, y: 16 };              
               
-              ship.pos = { x: 40, y: h / 2 };
+              ship.pos = { x: this.props.enterCoords[0], y: this.props.enterCoords[1] };
               ship.update = function(dt, t) {
                 const { x, y } = controls;
                 //const rps = Math.PI * 2 * dt;
@@ -97,8 +146,9 @@ class GWin extends Component {
                   this.pos.y > h || this.pos.y < -120) {
                   ships.remove(ship);
                   ship.dead = true;
-                  dispatchDeath("south", "south");
                   onSceneLeave();
+                  const newCoords = calculateEntry(this.pos.x, this.pos.y, w, h);
+                  dispatchDeath(newCoords[0], newCoords[1], newCoords[2], newCoords[3], that.props.lastLocKey);                 
                   
                 }
                 this.pos.y += y * dt * 200;
@@ -106,8 +156,8 @@ class GWin extends Component {
                 //console.log(`(x , y) = ${this.pos.x},${this.pos.y}`);
 
                 const { scale } = this;
-                scale.x = Math.abs(Math.sin(t)) + 2;
-                scale.y = Math.abs(Math.sin(t * 1.1)) + 1.5;
+                scale.x = Math.abs(Math.sin(t * .7)) + 1.7;
+                scale.y = Math.abs(Math.sin(t * .7)) + 1.7;
               }
             };
           

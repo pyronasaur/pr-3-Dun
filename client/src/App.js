@@ -28,17 +28,19 @@ class App extends Component {
 
   render(){
     return (
-      <div>
+      <div id="appGameWindow">
         {console.log(this.props)}
         {this.props.gWins.gWins.map((gwin, index) => {
             return (
               <GWin
                 cWidth={gwin.width}
                 cHeight={gwin.height}
+                enterCoords={ [gwin.enterCoords[0], gwin.enterCoords[1]] }
                 class="gwin"
                 lastLoc={gwin.lastLoc}
+                lastLocKey={gwin.lastLocKey}
                 direction={gwin.direction}
-                key={"canvasKey" + index}
+                key={gwin.key}
               />
             )
           })}

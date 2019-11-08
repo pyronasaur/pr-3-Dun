@@ -7,17 +7,17 @@ class RenCanvas {
     this.ctx = canvas.getContext("2d");
     this.ctx.imageSmoothingEnabled = false;
     this.ctx.textBaseline = "top";
-    this.fitXandY(this.view);
+    // this.fitXandY(this.view);
     this.drewBack = false;
     this.screenshot = "";
   }
 
-  fitXandY(canvas) {
-    canvas.style.width ='100%';
-    canvas.style.height='100%';
-    canvas.width  = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-  }
+  // fitXandY(canvas) {
+  //   canvas.style.width ='100%';
+  //   canvas.style.height='100%';
+  //   canvas.width  = canvas.offsetWidth;
+  //   canvas.height = canvas.offsetHeight;
+  // }
 
   drawStars(ctx, w, h) {
     ctx.fillStyle = "black";
