@@ -9,7 +9,7 @@ function stateToProperty(state) {
   }
 }
 
-function dispatchDeath(x, y, lastLoc, direction, lastLocKey) {
+function dispatchDeath(x, y, lastLoc, direction, lastLocKey, point) {
   store.dispatch({
     type: "DEAD_IN_ZONE",
     payload: {
@@ -19,7 +19,8 @@ function dispatchDeath(x, y, lastLoc, direction, lastLocKey) {
         enterCoords: [x, y],
         lastLoc: lastLoc,
         lastLocKey: lastLocKey,
-        direction: direction
+        direction: direction,
+        point: point
     }
   })
 }
@@ -95,12 +96,23 @@ class GWin extends Component {
             whitestar: new Texture("WhiteStar.png"),
             fullmoon: new Texture("FullMoon.png"),
             yellowhalf: new Texture("YellowHalfMoon.png"),
+            earth: new Texture("Earth.png"),
             spaceship: new Texture("UfoGrey.png")
           };
           
           scene.add("starfield");
 
           const stars = scene.add(new Container());
+
+            let point = 0;
+            let starnum = Math.ceil(Math.random() * 4);
+            if(starnum === 1) {
+              const earth = stars.add(new Sprite(textures.earth));
+              earth.pos.x = Math.ceil(Math.random() * this.props.cWidth);
+              earth.pos.y = Math.ceil(Math.random() * this.props.cHeight);
+              that.point = 1;
+              //console.log("points up " + that.point);
+            }
             
             const blue = stars.add(new Sprite(textures.blueplanet));
             blue.pos.x = Math.ceil(Math.random() * this.props.cWidth);
@@ -111,7 +123,7 @@ class GWin extends Component {
             yellow.pos.y = Math.ceil(Math.random() * this.props.cHeight);
             yellow.pivot = { x: 8, y: 8 };
 
-            let starnum = Math.ceil(Math.random() * 20);
+            starnum = Math.ceil(Math.random() * 20);
             for (let i = 0; i < starnum; i++) {
               
               const white = stars.add(new Sprite(textures.whitestar));
@@ -148,7 +160,8 @@ class GWin extends Component {
                   ship.dead = true;
                   onSceneLeave();
                   const newCoords = calculateEntry(this.pos.x, this.pos.y, w, h);
-                  dispatchDeath(newCoords[0], newCoords[1], newCoords[2], newCoords[3], that.props.lastLocKey);                 
+                  //console.log("points are " + that.point);
+                  dispatchDeath(newCoords[0], newCoords[1], newCoords[2], newCoords[3], that.props.lastLocKey, that.point);                 
                   
                 }
                 this.pos.y += y * dt * 200;
@@ -165,7 +178,10 @@ class GWin extends Component {
         game.run(dt => {
           const rps = Math.PI * 2 * dt;
           stars.map((s, i) => {
-            s.rotation += i * rps;
+            if(s.texture.img.src != textures.earth || s.texture != textures.yellowhalf || s.texture != textures.blueplanet)
+            {
+              s.rotation += i * rps;
+            }
           });
         });   
         

@@ -1,19 +1,18 @@
 body {
   margin: 30px auto;
   text-align: center;
-  background-color: #161414;
+  background-color: #161414 !important;
   color: #999;
-}
-
-#root {
-  display: flex;
-  justify-content: space-around;
 }
 
 #appGameWindow {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.containerDiv {
+  width: 100%;
 }
 
 .gameWindow {
